@@ -1,7 +1,8 @@
-exports.onRouteUpdate = ({ location }) => {
+exports.onRouteUpdate = ({ location }, pluginOptions = {}) => {
   if (process.env.NODE_ENV !== `production` || typeof gtag !== `function`) {
     return null
   }
+  const { eventConfig = {} } = pluginOptions
 
   const pathIsExcluded =
     location &&
@@ -15,7 +16,7 @@ exports.onRouteUpdate = ({ location }) => {
     const pagePath = location
       ? location.pathname + location.search + location.hash
       : undefined
-    window.gtag(`event`, `page_view`, { page_path: pagePath })
+    window.gtag(`event`, `page_view`, { page_path: pagePath, ...eventConfig })
   }
 
   if (`requestAnimationFrame` in window) {
